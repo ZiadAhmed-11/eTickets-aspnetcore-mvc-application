@@ -1,0 +1,93 @@
+﻿@model Movie
+
+@{
+    ViewData["Title"] = "Edit Movie";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Edit Movie</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-3">
+                            <label for="Name" class="form-label">Movie Name</label>
+                            <input type="text" id="Name" name="Name" class="form-control" asp-for="Name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Description</label>
+                            <textarea id="Description" name="Description" class="form-control" asp-for="Description" rows="4"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="Price" class="form-label">Price</label>
+                                <input type="text" id="Price" name="Price" class="form-control" asp-for="Price" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ImageURL" class="form-label">Image URL</label>
+                                <input type="text" id="ImageURL" name="ImageURL" class="form-control" asp-for="ImageURL" />
+                                <span asp-validation-for="ImageURL" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="StartDate" class="form-label">Start Date</label>
+                                <input type="date" id="StartDate" name="StartDate" class="form-control" asp-for="StartDate" />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="EndDate" class="form-label">End Date</label>
+                                <input type="date" id="EndDate" name="EndDate" class="form-control" asp-for="EndDate" />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="MovieCategory" class="form-label">Movie Category</label>
+                            <select id="MovieCategory" name="MovieCategory" class="form-select" asp-for="MovieCategory">
+                                <option value="">Select Category</option>
+                                @foreach (var category in Enum.GetValues(typeof(eTickets.Data.Enums.MovieCategory)))
+                                {
+                                    <option value="@category">@category</option>
+                                }
+                            </select>
+                            <span asp-validation-for="MovieCategory" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="CinemaId" class="form-label">Cinema</label>
+                            <select id="CinemaId" name="CinemaId" class="form-select" asp-for="CinemaId" asp-items="ViewBag.Cinemas"></select>
+                            <span asp-validation-for="CinemaId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ProducerId" class="form-label">Producer</label>
+                            <select id="ProducerId" name="ProducerId" class="form-select" asp-for="ProducerId" asp-items="ViewBag.Producers"></select>
+                            <span asp-validation-for="ProducerId" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

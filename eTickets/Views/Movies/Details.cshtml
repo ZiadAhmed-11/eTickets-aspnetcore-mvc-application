@@ -1,0 +1,43 @@
+﻿@model Movie
+
+@{
+    ViewData["Title"] = "Movie Details";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="@Model.ImageURL" alt="@Model.Name" class="img-fluid" />
+    </div>
+    <div class="col-md-6">
+        <h2>@Model.Name</h2>
+        <p><b>Description: </b>@Model.Description</p>
+        <p><b>Cinema: </b>@Model.Name</p> <!-- Assuming Cinema is a navigation property and you want to display its name -->
+        <p><b>Category: </b>@Model.MovieCategory</p>
+        <p><b>Start Date: </b>@Model.StartDate.ToString("dd MMM yyyy")</p>
+        <p><b>End Date: </b>@Model.EndDate.ToString("dd MMM yyyy")</p>
+        <p>
+            <b>Status: </b>
+            @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
+            {
+                <span class="badge bg-success text-white">AVAILABLE</span>
+            }
+            else if (DateTime.Now > Model.EndDate)
+            {
+                <span class="badge bg-danger text-white">Expired</span>
+            }
+            else
+            {
+                <span class="badge bg-primary text-white">UPCOMING</span>
+            }
+        </p>
+        <p><b>Price: </b>@Model.Price.ToString("c")</p>
+        <div class="btn-group">
+            <a class="btn btn-success text-white"><i class="bi bi-cart-plus"></i> Add To Cart (@Model.Price.ToString("c"))</a>
+        </div>
+        <div class="btn-group">
+            <a asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Update</a>
+
+        </div>
+
+    </div>
+</div>

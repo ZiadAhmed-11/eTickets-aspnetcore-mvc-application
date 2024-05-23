@@ -1,0 +1,53 @@
+﻿@model Producer
+
+@{
+    ViewData["Title"] = "Update Producers";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="text-center mb-4">Update Producer</h1>
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3 text-center">
+                <img id="ProfilePicturePreview" class="border-info rounded-circle" style="max-width: 150px" />
+            </div>
+            <div class="mb-3">
+                <label for="ProfilePictureURL" class="form-label">Profile Picture URL</label>
+                <input type="text" id="ProfilePictureURL" name="ProfilePictureURL" value="@Model.ProfilePictureURL" class="form-control" />
+                <span asp-validation-for="ProfilePictureURL" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="FullName" class="form-label">Full Name</label>
+                <input type="text" id="FullName" name="FullName" value="@Model.FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="Bio" class="form-label">Biography</label>
+                <input type="text" id="Bio" name="Bio" value="@Model.Bio" class="form-control" />
+                <span asp-validation-for="Bio" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-outline-success">Update</button>
+                <a href="@Url.Action("Index", "Actors")" class="btn btn-outline-secondary">Show All</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+            var output = document.getElementById('ProfilePicturePreview');
+            output.src = $("#ProfilePictureURL").val();
+        })
+
+        $("#ProfilePictureURL").on("change", function () {
+            var output = document.getElementById('ProfilePicturePreview');
+            output.src = $(this).val();
+        })
+    </script>
+}
