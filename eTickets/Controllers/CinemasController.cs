@@ -1,18 +1,20 @@
 ﻿using eTickets.Data;
 using eTickets.Data.Services;
 using eTickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTickets.Controllers
 {
+    [AllowAnonymous]
     public class CinemasController : Controller
     {
         private readonly ICinemasService _service;
 
         public CinemasController(ICinemasService service)
         {
-            _service= service;
+            _service = service;
         }
         public async Task<IActionResult> Index()
         {
@@ -29,11 +31,17 @@ namespace eTickets.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Logo,Name,Description")] Cinema cinema)
         {
-            if (!ModelState.IsValid) return View(cinema);
+            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
 
-            await _service.Add(cinema);
-            return RedirectToAction(nameof(Index));
-        }
+                if (!ModelState.IsValid) return View(cinema);
+
+                await _service.Add(cinema);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+                return RedirectToAction(nameof(Index));
+            }
 
         //Get: Cinemas/Details/1
         public async Task<IActionResult> Details(int id)
@@ -47,10 +55,16 @@ namespace eTickets.Controllers
         //Get: Cinemas/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var actorDetails = await _service.GetById(id);
-            if (actorDetails == null)
+            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+
+                var actorDetails = await _service.GetById(id);
+                if (actorDetails == null)
+                    return RedirectToAction(nameof(Index));
+                return View(actorDetails);
+            }
+            else
                 return RedirectToAction(nameof(Index));
-            return View(actorDetails);
         }
 
         [HttpPost]
@@ -64,13 +78,19 @@ namespace eTickets.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //Get: Cinemas/Edit/1
+        //Get: Cinemas/Delete/1
         public async Task<IActionResult> Delete(int id)
         {
-            var cinemaDetails = await _service.GetById(id);
-            if (cinemaDetails == null)
+            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+
+                var cinemaDetails = await _service.GetById(id);
+                if (cinemaDetails == null)
+                    return RedirectToAction(nameof(Index));
+                return View(cinemaDetails);
+            }
+            else
                 return RedirectToAction(nameof(Index));
-            return View(cinemaDetails);
         }
 
         [HttpPost, ActionName("Delete")]

@@ -1,12 +1,14 @@
 ﻿using eTickets.Data;
 using eTickets.Data.Services;
 using eTickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTickets.Controllers
 {
+    [AllowAnonymous]
     public class MoviesController : Controller
     {
         private readonly IMoviesService _service;
@@ -33,9 +35,14 @@ namespace eTickets.Controllers
         //Get : Movies/create
         public async Task<IActionResult> Create()
         {
-            ViewData["Cinemas"] = new SelectList(await _service.GetCinemasAsync(), "Id", "Name");
-            ViewData["Producers"] = new SelectList(await _service.GetProducersAsync(), "Id", "FullName");
-            return View();
+            if(User.Identity.IsAuthenticated && User.IsInRole("Admin")) {
+                ViewData["Cinemas"] = new SelectList(await _service.GetCinemasAsync(), "Id", "Name");
+                ViewData["Producers"] = new SelectList(await _service.GetProducersAsync(), "Id", "FullName");
+                return View();
+            }
+            else
+                return RedirectToAction(nameof(Index));
+            
         }
 
 
@@ -56,16 +63,22 @@ namespace eTickets.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            var movie = await _service.GetById(id.Value);
-            if (movie == null)
+            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
-                return NotFound();
+
+                var movie = await _service.GetById(id.Value);
+                if (movie == null)
+                {
+                    return NotFound();
+                }
+
+                ViewData["Cinemas"] = new SelectList(await _service.GetCinemasAsync(), "Id", "Name", movie.CinemaId);
+                ViewData["Producers"] = new SelectList(await _service.GetProducersAsync(), "Id", "FullName", movie.ProducerId);
+
+                return View(movie);
             }
-
-            ViewData["Cinemas"] = new SelectList(await _service.GetCinemasAsync(), "Id", "Name", movie.CinemaId);
-            ViewData["Producers"] = new SelectList(await _service.GetProducersAsync(), "Id", "FullName", movie.ProducerId);
-
-            return View(movie);
+            else
+                return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

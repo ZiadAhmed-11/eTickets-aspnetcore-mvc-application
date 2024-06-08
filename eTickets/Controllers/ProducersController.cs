@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace eTickets.Controllers
 {
+    [AllowAnonymous]
+
     public class ProducersController : Controller
     {
         private readonly IProducersService _service;

@@ -1,11 +1,14 @@
 ﻿using eTickets.Data;
 using eTickets.Data.Services;
 using eTickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTickets.Controllers
 {
+    [AllowAnonymous]
+
     public class ActorsController : Controller
     {
         private readonly IActorsService _service;

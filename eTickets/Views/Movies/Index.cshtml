@@ -1,5 +1,4 @@
-﻿@*Define model*@
-@model List<Movie>
+﻿@model List<eTickets.Models.Movie>
 @{
     ViewData["Title"] = "List of Movies";
 }
@@ -21,10 +20,8 @@
                     <div class="col-md-6 bg-success bg-opacity-10">
                         <div class="card-body">
                             <p class="card-text">@item.Description</p>
-                            <p class="card-text"><b>Cinema: </b>@item.Name</p>
+                            <p class="card-text"><b>Cinema: </b>@item.CinemaId</p>
                             <p class="card-text"><b>Category: </b>@item.MovieCategory</p>
-                            <p class="card-text"><b>Start Date: </b>@item.StartDate.ToString("dd MMM yy")</p>
-                            <p class="card-text"><b>End Date: </b>@item.EndDate.ToString("dd MMM yy")</p>
                             <p class="card-text">
                                 <b>Status: </b>
                                 @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
@@ -40,6 +37,8 @@
                                     <span class="badge bg-primary text-white">UPCOMING</span>
                                 }
                             </p>
+                            <p class="card-text space-mono-regular"><b>Start Date: </b>@item.StartDate.ToString("dd MMM yy")</p>
+                            <p class="card-text space-mono-regular"><b>End Date: </b>@item.EndDate.ToString("dd MMM yy")</p>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -51,11 +50,11 @@
                 </div>
             </div>
         </div>
-
     }
-
 </div>
-
-<div style="position:fixed; right:25px; bottom:25px" class="text-white">
-    <a asp-controller="Movies" asp-action="Create" class="btn btn-success"><i class=" bi-plus-circle p-1"></i>Add New</a>
-</div>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div style="position:fixed; right:25px; bottom:25px" class="text-white">
+        <a asp-controller="Movies" asp-action="Create" class="btn btn-success"><i class=" bi-plus-circle p-1"></i>Add New</a>
+    </div>
+}
