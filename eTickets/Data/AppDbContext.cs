@@ -23,7 +23,25 @@ namespace eTickets.Data
             modelBuilder.Entity<Actor_Movie>().HasOne(m => m.Movie).WithMany(am => am.Actors_Movies).HasForeignKey(am => am.MovieId);
             modelBuilder.Entity<Actor_Movie>().HasOne(m => m.Actor).WithMany(am => am.Actors_Movies).HasForeignKey(am => am.ActorId);
 
+            modelBuilder.Entity<Cart>()
+                .HasMany(c => c.CartMovies)
+                .WithOne(cm => cm.Cart)
+                .HasForeignKey(cm => cm.CartId);
 
+            modelBuilder.Entity<CartMovie>()
+                .HasOne(cm => cm.Movie)
+                .WithMany(m => m.CartMovies)
+                .HasForeignKey(cm => cm.MovieId);
+
+            modelBuilder.Entity<CartMovie>()
+                .HasOne(cm => cm.Cart)
+                .WithMany(c => c.CartMovies)
+                .HasForeignKey(cm => cm.CartId);
+
+            // Specify precision and scale for Subtotal property in CartMovie
+            modelBuilder.Entity<CartMovie>()
+                .Property(cm => cm.Subtotal)
+                .HasColumnType("decimal(18,2)");
 
             base.OnModelCreating(modelBuilder);
         }
@@ -36,6 +54,7 @@ namespace eTickets.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-
+        public DbSet<Cart> Cats { get;set; }
+        public DbSet<CartMovie> CartMovies { get; set; }
     }
 }

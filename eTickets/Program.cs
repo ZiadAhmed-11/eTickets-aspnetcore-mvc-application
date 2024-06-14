@@ -28,6 +28,9 @@ builder.Services.AddIdentity<ApplicationUser,ApplicationRole>()
     .AddUserStore<UserStore<ApplicationUser,ApplicationRole,AppDbContext,Guid>>()
     .AddRoleStore<RoleStore<ApplicationRole,AppDbContext,Guid>>();
 
+builder.Services.AddScoped<ICartMovieService, CartMovieService>();
+
+
 builder.Services.AddAuthorization(options=>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -61,6 +64,6 @@ AppDbInitializer.Seed(app);
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Movies}/{action=Index}/{id?}");
 
 app.Run();
