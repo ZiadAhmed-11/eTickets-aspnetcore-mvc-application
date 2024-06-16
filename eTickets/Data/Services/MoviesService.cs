@@ -29,4 +29,9 @@ public class MovieService : EntityBaseRepository<Movie>, IMoviesService
     {
         return await _context.Movies.Include(m => m.Cinema).ToListAsync();
     }
+    public async Task<Movie> GetAsync(int id)
+    {
+        var movie=await _context.Movies.FirstOrDefaultAsync(x=>x.Id==id);
+        return movie;
+    }
 }

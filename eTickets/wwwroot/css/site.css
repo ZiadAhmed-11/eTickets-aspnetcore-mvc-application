@@ -57,9 +57,9 @@ body {
     content: "";
     position: absolute;
     left: 15px;
-    bottom: -2px;
+    bottom: 2px;
     height: 1px;
-    width: 50%;
+    width: 75%;
     border-bottom: 2px solid #626262;
 }
 

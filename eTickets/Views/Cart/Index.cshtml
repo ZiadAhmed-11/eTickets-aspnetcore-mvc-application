@@ -1,0 +1,42 @@
+﻿@model eTickets.Models.Cart
+
+@{
+    ViewData["Title"] = "Your Cart";
+    ViewData["CurrrentUrl"] = "~/Cart";
+
+}
+
+<h2>Your Cart</h2>
+
+@if (Model.CartMovies == null || !Model.CartMovies.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartMovies)
+            {
+                <tr>
+                    <td>@item.Movie.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Subtotal.ToString("c")</td>
+                    <td>
+                        <form asp-action="RemoveFromCart" asp-route-cartMovieId="@item.CartMovieId" method="post">
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

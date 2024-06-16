@@ -29,6 +29,7 @@ builder.Services.AddIdentity<ApplicationUser,ApplicationRole>()
     .AddRoleStore<RoleStore<ApplicationRole,AppDbContext,Guid>>();
 
 builder.Services.AddScoped<ICartMovieService, CartMovieService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 
 builder.Services.AddAuthorization(options=>
