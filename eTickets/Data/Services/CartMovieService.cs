@@ -32,6 +32,16 @@ namespace eTickets.Data.Services
 
         }
 
+        public bool MovieIsExist(CartMovie cartMovie)
+        {
+            var cartId= _context.CartMovies.FirstOrDefault(cm=>cm.CartId==cartMovie.CartId&&cm.MovieId==cartMovie.MovieId);
+            if(cartId!=null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task UpdateCartMovie(CartMovie CartMovie)
         {
             var cartMovie= await _context.CartMovies.FindAsync(CartMovie.CartId);

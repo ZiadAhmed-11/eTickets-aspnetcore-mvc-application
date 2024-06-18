@@ -33,6 +33,6 @@ namespace eTickets.Models
         public Producer? Producer { get; set; }
 
         //Navigation Property
-        public ICollection<CartMovie> CartMovies { get; set; }
+        public ICollection<CartMovie>? CartMovies { get; set; }
     }
 }

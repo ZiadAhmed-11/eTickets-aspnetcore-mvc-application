@@ -33,12 +33,18 @@
             </p>
             <p><b>Price:</b> @Model.Price.ToString("c")</p>
             <div class="d-flex justify-content-start mt-4">
-                <a class="btn btn-success me-2 text-white">
-                    <i class="bi bi-cart-plus"></i> Add To Cart (@Model.Price.ToString("c"))
-                </a>
-                <a asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-                    Update
-                </a>
+                <form asp-action="Create" asp-controller="CartMovie" method="post" class="d-inline">
+                                <input type="hidden" name="MovieId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-success text-white m-1 @(DateTime.Now > Model.EndDate ? "disabled" : "")">
+                                    <i class="bi bi-cart-plus"></i> Add to cart @Model.Price.ToString("c")
+                                </button>
+                            </form>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <a asp-controller="Movies" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary m-1">
+                        Update
+                    </a>
+                }
             </div>
         </div>
     </div>
@@ -48,9 +54,11 @@
     .container {
         max-width: 900px;
     }
+
     .lead {
         font-size: 1.25rem;
     }
+
     .display-4 {
         font-size: 2.5rem;
         margin-bottom: 0.5rem;

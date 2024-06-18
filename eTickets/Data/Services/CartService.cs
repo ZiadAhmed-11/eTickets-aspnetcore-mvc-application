@@ -16,12 +16,12 @@ namespace eTickets.Data.Services
             await _context.Cats.AddAsync(cart);
             await _context.SaveChangesAsync();
 
-           /* // Add the CartId to each CartMovie and add them to the context
-            foreach (var cartMovie in Cartmovies)
-            {
-                cartMovie.CartId = cart.CartId;
-                await _context.CartMovies.AddAsync(cartMovie);
-            }*/
+            /* // Add the CartId to each CartMovie and add them to the context
+             foreach (var cartMovie in Cartmovies)
+             {
+                 cartMovie.CartId = cart.CartId;
+                 await _context.CartMovies.AddAsync(cartMovie);
+             }*/
 
             // Save the changes for CartMovies
             await _context.SaveChangesAsync();
@@ -33,13 +33,17 @@ namespace eTickets.Data.Services
         public async Task DeleteCartAsync(Cart cart)
         {
             var oldcart = await _context.Cats.FirstOrDefaultAsync(c => c.CartId == cart.CartId);
-             _context.Remove(cart);
+            _context.Remove(cart);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Cart> GetCartByUserIdAsync(Guid UserId)
+        public async Task<Cart> GetCartByUserIdAsync(Guid userId)
         {
-            return await _context.Cats.FirstOrDefaultAsync(c=>c.UserId==UserId);
+            // Include CartMovies and related Movie entities if needed
+            return await _context.Cats
+                .Include(c => c.CartMovies)
+                .ThenInclude(cm => cm.Movie)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
         }
 
         public async Task UpdateCartAsync(Cart cart)

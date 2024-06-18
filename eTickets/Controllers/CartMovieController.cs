@@ -29,12 +29,17 @@ namespace eTickets.Controllers
         {
             // Get the current user object
             var currentUser = await _userManager.GetUserAsync(User);
+            if(currentUser==null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             // Get the user ID
             var userId = currentUser.Id;
 
             var cart=await _cartService.GetCartByUserIdAsync(userId);
             Movie item = await _movieService.GetAsync(MovieId);
             var price=(Decimal) item.Price;
+
 
             CartMovie cartMovie = new CartMovie
             {
@@ -43,9 +48,26 @@ namespace eTickets.Controllers
                 Quantity = 1,
                 Subtotal =  price
             };
-
+            //check if that MovieItem is exists
+            if (_cartMovieService.MovieIsExist(cartMovie))
+            {
+                return RedirectToAction("Index", "Cart");
+            }
             await _cartMovieService.AddCartMovieAsync(cartMovie);
-            return RedirectToAction("Index","","Movies");
+            return RedirectToAction("Index","Movies");
+        }
+
+
+        public async Task<IActionResult> Delete(int cartMovieId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            await _cartMovieService.DeleteCartMovie(cartMovieId);
+            return RedirectToAction("Index", "Cart");
         }
     }
 }

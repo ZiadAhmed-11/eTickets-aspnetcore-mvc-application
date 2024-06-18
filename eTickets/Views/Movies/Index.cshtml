@@ -19,7 +19,7 @@
                     </div>
                     <div class="col-md-6 bg-success bg-opacity-10">
                         <div class="card-body">
-                            <p class="card-text">@item.Description</p>
+                            <p class="card-text" style="max-height:50px; overflow:hidden">@item.Description</p>
                             <p class="card-text"><b>Cinema: </b>@item.CinemaId</p>
                             <p class="card-text"><b>Category: </b>@item.MovieCategory</p>
                             <p class="card-text">
@@ -48,8 +48,8 @@
                             </a>
                             <form asp-action="Create" asp-controller="CartMovie" method="post" class="d-inline">
                                 <input type="hidden" name="MovieId" value="@item.Id" />
-                                <button type="submit" class="btn btn-success text-white">
-                                    <i class="bi bi-cart-plus"></i> Add To Cart (@item.Price.ToString("c"))
+                                <button type="submit" class="btn btn-success text-white @(DateTime.Now > item.EndDate ? "disabled" : "")">
+                                    <i class="bi bi-cart-plus"></i> Add to cart @item.Price.ToString("c")
                                 </button>
                             </form>
                         </div>

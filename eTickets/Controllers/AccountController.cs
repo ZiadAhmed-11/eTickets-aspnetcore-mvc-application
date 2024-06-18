@@ -106,5 +106,91 @@ namespace eTickets.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(MoviesController.Index), "Movies");
         }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Details()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var userDetails = new UserDetailsDTO
+            {
+                Email = currentUser.Email,
+                Phone = currentUser.PhoneNumber,
+                PersonName = currentUser.PersonName,
+            };
+
+            return View(userDetails);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var editUser = new UserEditDTO
+            {
+                Email = currentUser.Email,
+                Phone = currentUser.PhoneNumber,
+                PersonName = currentUser.PersonName
+            };
+
+            return View(editUser);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserEditDTO editUserDTO)
+        {
+            if (ModelState.IsValid == false)
+            {
+                ViewBag.Errors = ModelState.Values.SelectMany(temp => temp.Errors).Select(temp => temp.ErrorMessage);
+                return View(editUserDTO);
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            currentUser.Email = editUserDTO.Email;
+            currentUser.PhoneNumber = editUserDTO.Phone;
+            currentUser.PersonName = editUserDTO.PersonName;
+
+            if (!string.IsNullOrEmpty(editUserDTO.CurrentPassword) && !string.IsNullOrEmpty(editUserDTO.NewPassword) && editUserDTO.NewPassword == editUserDTO.ConfirmPassword)
+            {
+                var result = await _userManager.ChangePasswordAsync(currentUser, editUserDTO.CurrentPassword, editUserDTO.NewPassword);
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("Edit", error.Description);
+                    }
+                    return View(editUserDTO);
+                }
+            }
+
+            var updateResult = await _userManager.UpdateAsync(currentUser);
+            if (updateResult.Succeeded)
+            {
+                return RedirectToAction("Details");
+            }
+
+            foreach (var error in updateResult.Errors)
+            {
+                ModelState.AddModelError("Edit", error.Description);
+            }
+
+            return View(editUserDTO);
+        }
     }
 }

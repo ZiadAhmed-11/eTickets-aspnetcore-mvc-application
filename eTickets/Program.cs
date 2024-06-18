@@ -42,6 +42,11 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";
 });
 
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.ClientId = "475314198509032";
+    options.ClientSecret = "972a515408cf920387af8228725f580b";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

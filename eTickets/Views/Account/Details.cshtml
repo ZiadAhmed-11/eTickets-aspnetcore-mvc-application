@@ -1,0 +1,33 @@
+﻿@model eTickets.DTO.UserDetailsDTO
+
+@{
+    ViewData["Title"] = "User Details";
+    var defaultImageUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // Use this URL for the image
+}
+
+<h2 class="text-center">User Details</h2>
+
+<div class="user-details text-center">
+    <div class="user-image">
+        <img src="@defaultImageUrl" alt="User Image" class="img-thumbnail rounded-circle" width="150" height="150" />
+    </div>
+    <div class="user-info mt-3">
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Phone:</strong> @Model.Phone</p>
+        <p><strong>Name:</strong> @Model.PersonName</p>
+    </div>
+    <a href="@Url.Action("Edit", "Account")" class="btn btn-primary mt-3">Edit</a>
+</div>
+
+<style>
+    .user-details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .user-image img {
+        border-radius: 50%;
+    }
+</style>

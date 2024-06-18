@@ -1,4 +1,8 @@
-﻿@using eTickets
+﻿@using Microsoft.AspNetCore.Identity
+@using eTickets
+@using eTickets.IdentityEntities
 @using eTickets.Models
 @using eTickets.DTO
+@inject UserManager<ApplicationUser> UserManager
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

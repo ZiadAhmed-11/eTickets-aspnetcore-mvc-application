@@ -8,5 +8,6 @@ namespace eTickets.Data.Services
         Task AddCartMovieAsync(CartMovie CartMovie);
         Task UpdateCartMovie(CartMovie CartMovie);
         Task DeleteCartMovie(int CartMovieId);
+        bool MovieIsExist( CartMovie cartMovie);
     }
 }
